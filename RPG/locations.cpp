@@ -1,8 +1,6 @@
 #include <iostream>
 #include <string>
-#include <iterator>
-#include <iomanip>
-#include "src/hero/HeroClass.h"
+#include <utility>
 
 using namespace std;
 
@@ -14,6 +12,7 @@ namespace locations
     extern void sales();
     extern void inventory();
     extern int menu();
+
 
     void close_game(){
         clear();

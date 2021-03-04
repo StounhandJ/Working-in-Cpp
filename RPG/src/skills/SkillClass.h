@@ -8,10 +8,11 @@ int const NON_ELEMENT = 0;
 
 class SkillClass {
 public:
-    int getLevel() const{return level;}
-    int getPower() const{return power;}
-    int getCost() const{return cost;}
-    int getElement() const{return element;}
+    std::string getName() const{return this->name;}
+    int getLevel() const{return this->level;}
+    int getPower() const{return this->power;}
+    int getCost() const{return this->cost;}
+    int getElement() const{return this->element;}
 
     explicit SkillClass(std::string name, int level, int power, int cost, int element):
         name(std::move(name)), level(level), power(power), cost(cost), element(element)

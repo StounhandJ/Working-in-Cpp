@@ -2,15 +2,12 @@
 #include <string>
 #include <utility>
 #include <map>
-#include "src/skills/SkillClass.h"
 #include "src/hero/HeroClass.h"
+#include "src/artifacts/ArcherArtifact.h"
+#include "src/skills/ArcherSkills.h"
 #ifndef RPG_ARCHERCLASS_H
 #define RPG_ARCHERCLASS_H
-std::map <std::string,SkillClass> ArcherListSkill = {
-        {"StrongBlow", SkillClass("Сильный удар", 1, 100, 10, NON_ELEMENT)},
-        {"TorsionalImpact", SkillClass("Крутящий удар", 1, 100, 10, NON_ELEMENT)},
-        {"HeavenStrike", SkillClass("Удар небес", 1, 300, 50, NON_ELEMENT)},
-};
+
 
 class ArcherClass : public HeroClass {
 public:
@@ -23,10 +20,19 @@ public:
         this->HP = 100;
         this->damage = 20;
         this->defense = 15;
+        this->setArtifactHelmet(ArcherArtifact::helmet);
+        this->setArtifactArmor(ArcherArtifact::armor);
+        this->setArtifactHands(ArcherArtifact::hands);
+        this->setArtifactLegs(ArcherArtifact::legs);
+        this->allSkillsGrade={
+                ArcherSkills::daggerStrike,
+                ArcherSkills::lightArrow,
+                ArcherSkills::sharpArrow
+        };
     }
 
 protected:
-    virtual void up_level()
+    void up_level() override
     {
         this->level+=1;
         this->damage+=10;

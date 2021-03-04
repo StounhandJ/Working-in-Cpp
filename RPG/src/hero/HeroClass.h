@@ -14,7 +14,8 @@ class HeroClass {
 public:
     std::string getHeroName() const{return this->HeroName;}
     std::string getGradeName() const{return this->GradeName;}
-    std::list <SkillClass> getSkills() const{return this->skills;}
+    std::vector <SkillClass> getSkills() const{return this->skills;}
+    std::vector <SkillClass> getAllSkillsGrade() const{return this->allSkillsGrade;}
     int getHP() {return this->HP;}
     int getLevel() {return this->level;}
     int getExperience() {return this->experience;}
@@ -83,17 +84,22 @@ public:
     }
     int getManaAll() {return this->mana + this->getManaArtifact();}
 
-    void addGold(int gold){
-        this->gold+=gold;
+    void addGold(int addGold){
+        this->gold+=addGold;
+    }
+
+    void addExperience(int addExperience){
+        this->experience+=addExperience;
+        this->check_level();
     }
 
     void death(){
         std::cout << "Персонаж умер" << std::endl;
     }
 
-    void dealt_damage(int damage)
+    void dealt_damage(int dealtDamage)
     {
-        this->HP-=damage*this->getDefensePercentage();
+        this->HP-=dealtDamage*this->getDefensePercentage();
         this->check_death();
     }
 
@@ -152,7 +158,7 @@ public:
     void removeByArtifact(const ArtifactClass & val)
     {
         int number = 0;
-        for(auto atr : this->inventory)
+        for(const auto& atr : this->inventory)
         {
             if( atr.getArtifactName()==val.getArtifactName() && atr.getGold()==val.getGold())
             {
@@ -177,6 +183,9 @@ protected:
             ArtifactHands = ArtifactClass("Пусто", Artifact::HANDS),
             ArtifactLegs = ArtifactClass("Пусто", Artifact::LEGS);
     std::vector<ArtifactClass> inventory;
+    std::vector <SkillClass> skills{};
+    std::vector <SkillClass> allSkillsGrade{};
+
     int HP{},
         maxHP{},
         level{},
@@ -187,7 +196,6 @@ protected:
         magic_power{},
         mana{},
         gold{};
-    std::list <SkillClass> skills{};
 
     void check_death(){
         if (HP<1){
@@ -197,10 +205,29 @@ protected:
 
     void check_level()
     {
-        if (this->getExperienceNextLevel()){
+        if (experience>=this->getExperienceNextLevel()){
             experience-=this->getExperienceNextLevel();
             this->up_level();
+            this->up_new_skill();
             this->check_level();
+        }
+    }
+
+    void up_new_skill()
+    {
+        int number = 1;
+        for(const auto& atr : this->allSkillsGrade)
+        {
+            if( atr.getLevel()==level)
+            {
+                this->setSkill(atr);
+                break;
+            }
+//            if (number==this->allSkillsGrade.size())
+//            {
+//                return;
+//            }
+//            number+=1;
         }
     }
 

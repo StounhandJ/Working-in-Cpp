@@ -1,0 +1,149 @@
+#include <iostream>
+#include <string>
+#include <iterator>
+#include <iomanip>
+#include "src/hero/HeroClass.h"
+
+using namespace std;
+
+namespace locations
+{
+    extern void city();
+    extern void tavern();
+    extern void buys();
+    extern void sales();
+    extern void inventory();
+    extern int menu();
+
+    void close_game(){
+        clear();
+        std::cout << "Bye ; )" << std::endl;
+        exit(11);
+    }
+
+    void city()
+    {
+        while (true){
+            clear();
+        switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес"})){
+            case 0:
+                if (menu()==1){
+                    close_game();
+                    return;
+                } break;
+            case 1:tavern();break;
+        }
+        }
+    }
+
+    void tavern()
+    {
+        while (true){
+            clear();
+            switch (choice("Таверна", list<string>{"Пойти в центр города","Купить","Продать"})){
+                case 0:
+                    if (menu()==1){
+                        close_game();
+                        return;
+                    } break;
+                case 1:return;
+                case 2:buys();break;
+                case 3:sales();break;
+            }
+        }
+    }
+
+    void buys(){
+        while (true) {
+            clear();
+            switch (choice("Покупка !ТУТ ПУСТО!", list<string>{})){
+                case 0:return;
+            }
+        }
+    }
+
+    void sales(){
+        while (true) {
+            clear();
+            list<string> inventor;
+            for (const auto& artifact : Hero.getInventory()) {
+                inventor.push_back(artifact.getArtifactName()+" на "+artifact.getTypeName()+" за "+to_string(artifact.getGold())+" золотых");
+            }
+            int result = choice("Продажа", inventor);
+            if (result==0){
+                return;
+            }
+            else if (result<=Hero.getInventory().size()) {
+                auto artifact = Hero.getInventory()[result-1];
+                Hero.addGold(artifact.getGold());
+                Hero.removeByArtifact(artifact);
+            }
+            }
+        }
+
+    void inventory()
+    {
+        while (true){
+            clear();
+            list<string> inventor;
+            string worn_by;
+            for (const auto& artifact : Hero.getWornBy()) {
+                worn_by+=artifact.getTypeName()+": "+artifact.getArtifactName()+" за "+to_string(artifact.getGold())+" золотых\n";
+            }
+            for (const auto& artifact : Hero.getInventory()) {
+                inventor.push_back(artifact.getArtifactName()+" на "+artifact.getTypeName());
+            }
+            std::cout << "Сейчас на персонаже:\n"+ worn_by+"\n"<< std::endl;
+            int result = choice("", inventor);
+            if (result==0){
+                return;
+            }
+            else if (result<=Hero.getInventory().size())
+            {
+                auto artifact = Hero.getInventory()[result-1];
+                switch (artifact.getType()) {
+                    case Artifact::HELMET:
+                        Hero.setArtifactHelmet(artifact);
+                        break;
+                    case Artifact::ARMOR:
+                        Hero.setArtifactArmor(artifact);
+                        break;
+                    case Artifact::HANDS:
+                        Hero.setArtifactHands(artifact);
+                        break;
+                    case Artifact::LEGS:
+                        Hero.setArtifactLegs(artifact);
+                        break;
+                }
+            }
+        }
+    }
+
+    int menu()
+    {
+        while (true){
+            clear();
+            string statistics="Информация\n";
+            string text;
+            statistics+="Имя персонажа: "+Hero.getHeroName()+"\n";
+            statistics+="Имя класса: "+Hero.getGradeName()+"\n";
+            statistics+="Уроень: "+to_string(Hero.getLevel())+"\n";
+            statistics+="Опыт: "+to_string(Hero.getExperience())+"/"+to_string(Hero.getExperienceNextLevel())+"\n";
+            statistics+= "HP: " + to_string(Hero.getHP()) + "/" + to_string(Hero.getMaxHPAll())+" +"+to_string(Hero.getHPArtifact()) + "\n";
+            statistics+="Сила: "+to_string(Hero.getDamageAll())+" +"+to_string(Hero.getDamageArtifact())+"\n";
+            statistics+="Магическая сила: "+to_string(Hero.getMagicPowerAll())+" +"+to_string(Hero.getMagicPowerArtifact())+"\n";
+            statistics+="Защита: "+to_string(Hero.getDefenseAll())+" +"+to_string(Hero.getDefenseArtifact())+" в процентах "+to_string((int)(100-Hero.getDefensePercentage()*100))+"%"+"\n";
+            statistics+="Мана: "+to_string(Hero.getManaAll())+" +"+to_string(Hero.getManaArtifact())+"\n";
+            statistics+="Знания: "+to_string(Hero.getKnowledgeAll())+" +"+to_string(Hero.getKnowledgeArtifact())+"\n";
+            statistics+="Золото: "+to_string(Hero.getGold())+"\n";
+            std::cout << statistics << std::endl;
+            switch (choice("", list<string>{"Инвентарь", "Выход из игры"})){
+                case 0:return 0;break;
+                case 1:
+                    inventory();
+                    break;
+                case 2:return 1;break;
+            }
+        }
+    }
+}

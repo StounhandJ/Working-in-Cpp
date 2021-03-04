@@ -3,11 +3,12 @@
 #include <utility>
 #ifndef RPG_ARTIFACTCLASS_H
 #define RPG_ARTIFACTCLASS_H
-
-int const HELMET = 0;
-int const ARMOR = 1;
-int const HANDS = 2;
-int const LEGS = 3;
+namespace Artifact {
+    int const HELMET = 0;
+    int const ARMOR = 1;
+    int const HANDS = 2;
+    int const LEGS = 3;
+}
 
 class ArtifactClass {
 public:
@@ -20,8 +21,25 @@ public:
     int getKnowledge() const{return optionally_knowledge;}
     int getMagicPower() const{return optionally_magic_power;}
     int getMana() const{return optionally_mana;}
+    std::string getTypeName() const{
+        std::string text;
+        switch (this->type) {
+            case Artifact::HELMET:
+                text = "Голова";
+                break;
+            case Artifact::ARMOR:
+                text = "Тело";
+                break;
+            case Artifact::HANDS:
+                text = "Руки";
+                break;
+            case Artifact::LEGS:
+                text = "Ноги";
+                break;
+        }
+        return text;}
 
-    explicit ArtifactClass(std::string name, int type=ARMOR,int gold=10, int optionally_damage=0, int optionally_HP=0,
+    explicit ArtifactClass(std::string name, int type=Artifact::ARMOR,int gold=0, int optionally_damage=0, int optionally_HP=0,
                            int optionally_defense=0, int optionally_knowledge=0, int optionally_magic_power=0, int optionally_mana = 0):
     ArtifactName(std::move(name)), type(type), gold(gold), optionally_damage(optionally_damage), optionally_HP(optionally_HP),
     optionally_defense(optionally_defense), optionally_knowledge(optionally_knowledge), optionally_magic_power(optionally_magic_power), optionally_mana(optionally_mana)

@@ -11,7 +11,7 @@ add_executable(RPG
         # Классы персонажей #
         src/hero/grade/WarriorClass.h src/hero/grade/ArcherClass.h src/hero/grade/MagClass.h
         # Сеты артефактов #
-        src/artifacts/ArcherArtifact.h src/artifacts/WarriorArtifact.h src/artifacts/MagArtifact.h
+        src/artifacts/sets/ArcherArtifact.h src/artifacts/sets/WarriorArtifact.h src/artifacts/sets/MagArtifact.h
         # Сеты скилов #
-        src/skills/WarriorSkills.h src/skills/ArcherSkills.h src/skills/MagSkills.h
+        src/skills/sets/WarriorSkills.h src/skills/sets/ArcherSkills.h src/skills/sets/MagSkills.h
         )

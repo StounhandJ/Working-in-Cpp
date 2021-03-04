@@ -3,8 +3,8 @@
 #include <utility>
 #include <map>
 #include "src/hero/HeroClass.h"
-#include "src/artifacts/ArcherArtifact.h"
-#include "src/skills/ArcherSkills.h"
+#include "src/artifacts/sets/ArcherArtifact.h"
+#include "src/skills/sets/ArcherSkills.h"
 #ifndef RPG_ARCHERCLASS_H
 #define RPG_ARCHERCLASS_H
 

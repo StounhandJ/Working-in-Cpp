@@ -3,8 +3,8 @@
 #include <utility>
 #include <map>
 #include "src/hero/HeroClass.h"
-#include "src/artifacts/MagArtifact.h"
-#include "src/skills/MagSkills.h"
+#include "src/artifacts/sets/MagArtifact.h"
+#include "src/skills/sets/MagSkills.h"
 #ifndef RPG_MAGCLASS_H
 #define RPG_MAGCLASS_H
 
@@ -19,6 +19,8 @@ public:
         this->HP = 100;
         this->damage = 10;
         this->defense = 15;
+        this->maxMana = 100;
+        this->mana = 100;
         this->magic_power = 30;
         this->setArtifactHelmet(MagArtifact::helmet);
         this->setArtifactArmor(MagArtifact::armor);
@@ -26,9 +28,9 @@ public:
         this->setArtifactLegs(MagArtifact::legs);
         this->allSkillsGrade={
                 MagSkills::flashlightLight,
-                MagSkills::miniFireball,
                 MagSkills::staffStrike,
-                MagSkills::waterJet
+                MagSkills::waterJet,
+                MagSkills::miniFireball,
         };
     }
 

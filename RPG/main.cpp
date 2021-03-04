@@ -46,6 +46,7 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
     registration();
     clear();
+    Hero.spawn();
     locations::city();
     std::cout << Hero.getHeroName() << std::endl;
     std::cout << Hero.getHP() << std::endl;

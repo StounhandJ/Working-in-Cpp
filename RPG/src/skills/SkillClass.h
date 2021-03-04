@@ -3,8 +3,9 @@
 #include <utility>
 #ifndef RPG_SKILLCLASS_H
 #define RPG_SKILLCLASS_H
-
-int const NON_ELEMENT = 0;
+namespace SkillElement {
+    int const NON_ELEMENT = 0;
+}
 
 class SkillClass {
 public:
@@ -13,6 +14,14 @@ public:
     int getPower() const{return this->power;}
     int getCost() const{return this->cost;}
     int getElement() const{return this->element;}
+    std::string getElementName() const{
+        std::string text;
+        switch (this->element) {
+            case SkillElement::NON_ELEMENT:
+                text = "Нет";
+                break;
+        }
+        return text;}
 
     explicit SkillClass(std::string name, int level, int power, int cost, int element):
         name(std::move(name)), level(level), power(power), cost(cost), element(element)

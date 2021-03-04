@@ -23,6 +23,7 @@ public:
     int getDamage() {return this->damage;}
     int getDefense() {return this->defense;}
     double getDefensePercentage() {return 100 / (100 + (double)this->getDefenseAll());}
+    double getKnowledgePercentage() {return 1-(100 /(100 + (double)this->getKnowledgeAll()));}
     int getKnowledge() {return this->knowledge;}
     int getMagic_power() {return this->magic_power;}
     int getMana() {return this->mana;}
@@ -82,7 +83,7 @@ public:
         finalMana+=ArtifactLegs.getMana();
         return finalMana;
     }
-    int getManaAll() {return this->mana + this->getManaArtifact();}
+    int getMaxManaAll()  {return this->maxMana + this->getManaArtifact();}
 
     void addGold(int addGold){
         this->gold+=addGold;
@@ -94,7 +95,17 @@ public:
     }
 
     void death(){
+        this->dead = true;
         std::cout << "Персонаж умер" << std::endl;
+    }
+
+    void spawn(){
+        if (this->dead) {
+            this->gold = 100;
+            this->HP = this->getMaxHPAll();
+            this->mana = this->getMaxManaAll();
+            this->dead = false;
+        }
     }
 
     void dealt_damage(int dealtDamage)
@@ -103,12 +114,32 @@ public:
         this->check_death();
     }
 
-    void heal(int heal_HP)
+    void useHeal(int heal_HP)
     {
         this->HP = heal_HP;
         if (this->HP > this->getMaxHPAll()){
             this->HP = this->getMaxHPAll();
         }
+    }
+
+    void useRegenMana(int regen_mana)
+    {
+        this->HP = regen_mana;
+        if (this->HP > this->getMaxManaAll()){
+            this->HP = this->getMaxManaAll();
+        }
+    }
+
+    int useSkill(int numberSkill){
+        int skillDamage = 0;
+        if (numberSkill<=this->skills.size()){
+            SkillClass skill = this->skills[numberSkill];
+            if (this->mana>=skill.getCost()){
+                this->mana-=skill.getCost();
+                skillDamage = skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6);
+            }
+        }
+        return skillDamage;
     }
 
     void setArtifactHelmet(const ArtifactClass& NewArtifactHelmet){
@@ -172,10 +203,12 @@ public:
     explicit HeroClass(int HP=100,int maxHP=100, int level=1, int experience=0, int damage=0, int defense=0, int knowledge=0, int magic_power=0, int mana=0, int gold=100) :
             HP(HP), maxHP(maxHP), level(level),experience(experience),damage(damage),defense(defense),knowledge(knowledge),magic_power(magic_power),mana(mana),gold(gold){
         this->inventory.emplace_back("Тряпки",Artifact::ARMOR,35,0,10,5,0,0,0);
+        this->GradeName = "Маг2222";
     }
 
 protected:
 
+    bool dead=true;
     std::string HeroName,
                 GradeName;
     ArtifactClass ArtifactHelmet = ArtifactClass("Пусто", Artifact::HELMET),
@@ -195,6 +228,7 @@ protected:
         knowledge{},
         magic_power{},
         mana{},
+        maxMana{},
         gold{};
 
     void check_death(){
@@ -223,11 +257,6 @@ protected:
                 this->setSkill(atr);
                 break;
             }
-//            if (number==this->allSkillsGrade.size())
-//            {
-//                return;
-//            }
-//            number+=1;
         }
     }
 

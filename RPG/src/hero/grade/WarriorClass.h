@@ -3,8 +3,8 @@
 #include <utility>
 #include <map>
 #include "src/hero/HeroClass.h"
-#include "src/artifacts/WarriorArtifact.h"
-#include "src/skills/WarriorSkills.h"
+#include "src/artifacts/sets/WarriorArtifact.h"
+#include "src/skills/sets/WarriorSkills.h"
 #ifndef RPG_HEROGRADE_H
 #define RPG_HEROGRADE_H
 
@@ -25,10 +25,10 @@ public:
         this->setArtifactHands(WarriorArtifact::hands);
         this->setArtifactLegs(WarriorArtifact::legs);
         this->allSkillsGrade={
-                WarriorSkills::heavenStrike,
                 WarriorSkills::lightStrike,
                 WarriorSkills::strongBlow,
-                WarriorSkills::torsionalImpact
+                WarriorSkills::torsionalImpact,
+                WarriorSkills::heavenStrike
         };
     }
 

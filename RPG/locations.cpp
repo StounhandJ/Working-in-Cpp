@@ -11,6 +11,7 @@ namespace locations
     extern void buys();
     extern void sales();
     extern void inventory();
+    extern void listSkills();
     extern int menu();
 
 
@@ -24,14 +25,14 @@ namespace locations
     {
         while (true){
             clear();
-        switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес"})){
-            case 0:
-                if (menu()==1){
-                    close_game();
-                    return;
-                } break;
-            case 1:tavern();break;
-        }
+            switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес"})){
+                case 0:
+                    if (menu()==1){
+                        close_game();
+                        return;
+                    } break;
+                case 1:tavern();break;
+            }
         }
     }
 
@@ -118,6 +119,26 @@ namespace locations
         }
     }
 
+    void listSkills(){
+        while (true) {
+            clear();
+            string worn_by_skill;
+            for (const auto& artifact : Hero.getSkills()) {
+                worn_by_skill+="Название:"+artifact.getName()+
+                        "\nСтихия:"+artifact.getElementName()+
+                        "\nУровень: "+to_string(artifact.getLevel())+
+                        "\nСила:"+to_string(artifact.getPower())+
+                        "\nМана:"+to_string(artifact.getCost())+
+                        "\n-----------------\n";
+            }
+            std::cout << "Скилы\n\n"+ worn_by_skill+"\n"<< std::endl;
+            switch (choice("", list<string>{})) {
+                case 0:
+                    return;
+            }
+        }
+    }
+
     int menu()
     {
         while (true){
@@ -129,19 +150,20 @@ namespace locations
             statistics+="Уроень: "+to_string(Hero.getLevel())+"\n";
             statistics+="Опыт: "+to_string(Hero.getExperience())+"/"+to_string(Hero.getExperienceNextLevel())+"\n";
             statistics+= "HP: " + to_string(Hero.getHP()) + "/" + to_string(Hero.getMaxHPAll())+" +"+to_string(Hero.getHPArtifact()) + "\n";
+            statistics+="Мана: "+to_string(Hero.getMana())+ "/" + to_string(Hero.getMaxManaAll())+" +"+to_string(Hero.getManaArtifact())+"\n";
             statistics+="Сила: "+to_string(Hero.getDamageAll())+" +"+to_string(Hero.getDamageArtifact())+"\n";
             statistics+="Магическая сила: "+to_string(Hero.getMagicPowerAll())+" +"+to_string(Hero.getMagicPowerArtifact())+"\n";
             statistics+="Защита: "+to_string(Hero.getDefenseAll())+" +"+to_string(Hero.getDefenseArtifact())+" в процентах "+to_string((int)(100-Hero.getDefensePercentage()*100))+"%"+"\n";
-            statistics+="Мана: "+to_string(Hero.getManaAll())+" +"+to_string(Hero.getManaArtifact())+"\n";
-            statistics+="Знания: "+to_string(Hero.getKnowledgeAll())+" +"+to_string(Hero.getKnowledgeArtifact())+"\n";
+            statistics+="Знания: "+to_string(Hero.getKnowledgeAll())+" +"+to_string(Hero.getKnowledgeArtifact())+" доп.маг.урон "+to_string((int)(Hero.getKnowledgePercentage()*100))+"%"+"\n";
             statistics+="Золото: "+to_string(Hero.getGold())+"\n";
             std::cout << statistics << std::endl;
-            switch (choice("", list<string>{"Инвентарь", "Выход из игры"})){
+            switch (choice("", list<string>{"Инвентарь" ,"Список скилов", "Выход из игры"})){
                 case 0:return 0;break;
                 case 1:
                     inventory();
                     break;
-                case 2:return 1;break;
+                case 2:listSkills();break;
+                case 3:return 1;break;
             }
         }
     }

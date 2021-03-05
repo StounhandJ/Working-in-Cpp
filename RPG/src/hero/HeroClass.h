@@ -9,6 +9,13 @@
 
 #ifndef RPG_HERO_H
 #define RPG_HERO_H
+// Parent Class
+// При инецализации нужно указать GradeName и HeroName
+// Остальные параметры на усматрения
+// Virtual function:
+//
+// virtual void up_level()
+
 
 class HeroClass {
 public:
@@ -30,7 +37,7 @@ public:
     int getGold() {return this->gold;}
     std::vector<ArtifactClass> getInventory() {return this->inventory;}
     std::vector<ArtifactClass> getWornBy() {
-        return std::vector<ArtifactClass>{this->ArtifactHands,this->ArtifactArmor,this->ArtifactHands,this->ArtifactLegs};}
+        return std::vector<ArtifactClass>{this->ArtifactHelmet,this->ArtifactArmor,this->ArtifactHands,this->ArtifactLegs};}
     int getHPArtifact(){
         int finalHP=ArtifactHelmet.getHP();
         finalHP+=ArtifactArmor.getHP();
@@ -98,7 +105,6 @@ public:
 
     void death(){
         this->dead = true;
-        std::cout << "Персонаж умер" << std::endl;
     }
 
     void spawn(){
@@ -112,7 +118,7 @@ public:
 
     void dealt_damage(int dealtDamage)
     {
-        this->HP-=dealtDamage*this->getDefensePercentage();
+        this->HP-=int(dealtDamage*this->getDefensePercentage());
         this->check_death();
     }
 
@@ -146,6 +152,10 @@ public:
     int useSkill(const SkillClass& skill){
         this->mana-=skill.getCost();
         return int(skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6));
+    }
+
+    void newArtifactInventory(const ArtifactClass& NewArtifact){
+        this->inventory.push_back(NewArtifact);
     }
 
     void setArtifactHelmet(const ArtifactClass& NewArtifactHelmet){
@@ -206,22 +216,32 @@ public:
         }
     }
 
-    explicit HeroClass(int HP=100,int maxHP=100, int level=1, int experience=0, int damage=0, int defense=0, int knowledge=0, int magic_power=0, int mana=0, int gold=100) :
-            HP(HP), maxHP(maxHP), level(level),experience(experience),damage(damage),defense(defense),knowledge(knowledge),magic_power(magic_power),mana(mana),gold(gold){
-        this->inventory.emplace_back("Тряпки",Artifact::ARMOR,35,0,10,5,0,0,0);
-        this->GradeName = "Маг2222";
+    explicit HeroClass()
+    {
+        this->HeroName = "None";
+        this->GradeName = "None";
+        this->dead = true;
+        this->HP = 100;
+        this->mana = 100;
+        this->level = 1;
+        this->experience = 0;
+        this->damage = 10;
+        this->magic_power = 10;
+        this->defense = 30;
+        this->knowledge = 0;
+        this->gold = 100;
     }
 
 protected:
 
-    bool dead=true;
+    bool dead;
     std::string HeroName,
                 GradeName;
     ArtifactClass ArtifactHelmet = ArtifactClass("Пусто", Artifact::HELMET),
             ArtifactArmor = ArtifactClass("Пусто", Artifact::ARMOR),
             ArtifactHands = ArtifactClass("Пусто", Artifact::HANDS),
             ArtifactLegs = ArtifactClass("Пусто", Artifact::LEGS);
-    std::vector<ArtifactClass> inventory;
+    std::vector<ArtifactClass> inventory{};
     std::vector <SkillClass> skills{};
     std::vector <SkillClass> allSkillsGrade{};
 

@@ -17,7 +17,7 @@ public:
         this->GradeName = "Лучник";
         this->HeroName = std::move(name);
         this->maxHP = 100;
-        this->HP = 100;
+        this->maxMana = 150;
         this->damage = 20;
         this->defense = 15;
         this->setArtifactHelmet(ArcherArtifact::helmet);

@@ -2,6 +2,7 @@
 #include <string>
 #include <windows.h>
 #include <list>
+#include <random>
 using namespace std;
 
 
@@ -24,7 +25,7 @@ std::basic_string<Char, Traits, Allocator> operator*
 void clear() {
 //    system("cls");
     string indent = "\n";
-    cout << indent * 20;
+    cout << indent * 40;
 };
 
 int input_int(const string& name)
@@ -97,5 +98,17 @@ int choiceWhile(const string& question, const list<string>& variants, bool IsZer
             return result;
         }
     }
+}
+
+bool percentageChance(int percentage){
+    return percentage>rand()%100;
+}
+
+int randInt(int from, int before){
+    int number = rand()%(before+1);
+    if(number<from){
+        number+=from;
+    }
+    return number;
 }
 

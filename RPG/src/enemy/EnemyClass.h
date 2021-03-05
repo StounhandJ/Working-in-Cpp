@@ -3,6 +3,8 @@
 #include <utility>
 #ifndef RPG_ENEMYCLASS_H
 #define RPG_ENEMYCLASS_H
+// EnemyClass(Имя, HP, Урон, Защита, ПолучаемыйОпыт)
+
 
 class EnemyClass{
 public:
@@ -21,12 +23,12 @@ public:
 
     void dealt_damage(int dealtDamage)
     {
-        this->HP-=dealtDamage*this->getDefensePercentage();
+        this->HP-=int(dealtDamage*this->getDefensePercentage());
         this->check_death();
     }
 
-    explicit EnemyClass(std::string name, int maxHP, int damage, int defense, int experience):
-            name(std::move(name)), maxHP(maxHP), damage(damage), defense(defense), experience(experience)
+    explicit EnemyClass(std::string name, int HP, int damage, int defense, int experience):
+            name(std::move(name)), maxHP(HP), damage(damage), defense(defense), experience(experience)
     {
         this->HP=maxHP;
     }

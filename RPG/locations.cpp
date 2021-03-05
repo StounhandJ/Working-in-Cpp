@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include "src/enemy/enemies/undead.h"
+#include "src/dungeon/dungeons/LiteDungeon.h"
 #include "battle.cpp"
 
 using namespace std;
@@ -24,8 +24,94 @@ namespace locations
         exit(11);
     }
 
+    int input_dungeon(DungeonClass dungeon){
+        string info;
+        for (int level = 0; level < dungeon.getLevelCount(); level++) {
+            clear();
+            std::cout << "Вы на "+to_string(level+1)+" этаже" << std::endl;
+            Sleep(1000);
+            // Начало подуровня //
+            for(int subLevel = 0; subLevel < randInt(1,5); subLevel++ ){
+                clear();
+                // С каким-то шансом будет враг //
+                if (percentageChance(dungeon.getChanceMeetEnemies()))
+                {
+                    fight(Hero,dungeon.getEnemies(randInt(dungeon.getMinCountEnemyLevel(),dungeon.getMaxCountEnemyLevel())));
+                    clear();
+                    if(Hero.IsDeath()){
+                        return 1; // Персонаж умер в сражение //
+                    }
+                    string text = "С мобов вам выпало:\n";
+                    std::vector<ArtifactClass> listArtifacts = dungeon.getArtifacts(randInt(0,1));
+                    for (const auto& artifact : listArtifacts){
+                        Hero.newArtifactInventory(artifact);
+                        text+=artifact.getArtifactName()+" на "+artifact.getTypeName()+"\n";
+                    }
+                    if (!listArtifacts.empty()){
+                        std::cout << text << std::endl;
+                        Sleep(3000);
+                    }
+                }
+
+                // С шансом 10% будет сундук //
+                list<string> typeSubLevel{"Идти вперед"};
+                if (percentageChance(10)){
+                    typeSubLevel.emplace_back("Сундук");
+                }
+                // Выбор действия //
+                switch (choiceWhile("",typeSubLevel,true))
+                {
+                    case 0:
+                        if (menu()==1){
+                            close_game();
+                            return 0;
+                        }
+                        break;
+                    case 1:break;
+                    case 2:
+                        string text = "Из сундука вам выпало:\n";
+                        std::vector<ArtifactClass> listArtifacts = dungeon.getArtifacts(randInt(1,3));
+                        for (const auto& artifact : listArtifacts){
+                            Hero.newArtifactInventory(artifact);
+                            text+=artifact.getArtifactName()+" на "+artifact.getTypeName()+"\n";
+                        }
+                        std::cout << text << std::endl;
+                        Sleep(3000);
+                }
+            }
+        }
+        clear();
+        string text = "Вы прошли данж!\nВот ваш лут:\n";
+        std::vector<ArtifactClass> listArtifacts = dungeon.getArtifacts(randInt(3,6));
+        for (const auto& artifact : listArtifacts){
+            Hero.newArtifactInventory(artifact);
+            text+=artifact.getArtifactName()+" на "+artifact.getTypeName()+"\n";
+        }
+        std::cout << text << std::endl;
+        Sleep(5000);
+        return 0;
+    }
+
     void forest(){
-        Hero = fight(Hero, vector{UndeadEnemies::skeleton, UndeadEnemies::skeleton});
+        while (true){
+            clear();
+            switch (choice("Центр города", list<string>{"Легкое подземелье","Пойти в город"})){
+                case 0:
+                    if (menu()==1){
+                        close_game();
+                        return;
+                    } break;
+                case 1:
+                    if(input_dungeon(LiteDungeon)==1){
+                        std::cout << "Персонаж умер!" << std::endl;
+                        Sleep(2000);
+                        Hero.spawn();
+                        return;
+                    }
+                    break;
+                case 2:return;
+            }
+        }
     }
 
 
@@ -103,12 +189,12 @@ namespace locations
             list<string> inventor;
             string worn_by;
             for (const auto& artifact : Hero.getWornBy()) {
-                worn_by+=artifact.getTypeName()+": "+artifact.getArtifactName()+" за "+to_string(artifact.getGold())+" золотых\n";
+                worn_by+="\n"+artifact.getTypeName()+"|"+artifact.getInfo()+"\n";
             }
             for (const auto& artifact : Hero.getInventory()) {
                 inventor.push_back(artifact.getArtifactName()+" на "+artifact.getTypeName());
             }
-            std::cout << "Сейчас на персонаже:\n"+ worn_by+"\n"<< std::endl;
+            std::cout << "Сейчас на персонаже:\n"+ worn_by<< std::endl;
             int result = choice("", inventor);
             if (result==0){
                 return;

@@ -3,6 +3,9 @@
 #include <utility>
 #ifndef RPG_SKILLCLASS_H
 #define RPG_SKILLCLASS_H
+// SkillClass(Название, Уровень, Урон, ЦенаМаны, ТипЕлемента, МасовыйЛиУрон)
+
+
 namespace SkillElement {
     int const NON_ELEMENT = 0;
 }

@@ -4,7 +4,7 @@
 using namespace std;
 extern SkillClass listSkills();
 
-HeroClass fight(HeroClass hero, vector<EnemyClass> enemies){
+void fight(HeroClass& hero, vector<EnemyClass> enemies){
     bool battle = true;
     bool IsGoal = false;
     bool menuChoice = true;
@@ -85,7 +85,6 @@ HeroClass fight(HeroClass hero, vector<EnemyClass> enemies){
         battle=!(enemies.empty() or hero.IsDeath());
     }
     hero.useRegenMana(999999);
-    return hero;
 }
 
 

@@ -7,7 +7,9 @@ add_executable(RPG
         # Стартовый файл#
         main.cpp
         # Основные классы #
+        HeaderFiles/mainClass.h
         src/hero/HeroClass.h src/skills/SkillClass.h src/artifacts/ArtifactClass.h src/dungeon/DungeonClass.h src/enemy/EnemyClass.h
+        locations.cpp function.cpp battle.cpp
         # Классы персонажей #
         src/hero/grade/WarriorClass.h src/hero/grade/ArcherClass.h src/hero/grade/MagClass.h
         # Сеты артефактов #

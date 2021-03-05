@@ -1,14 +1,23 @@
+#include <windows.h>
 #include <iostream>
-#include <string>
-#include <utility>
 #include "src/dungeon/dungeons/LiteDungeon.h"
-#include "battle.cpp"
+#include "HeaderFiles/function.h"
+#include "HeaderFiles/battle.h"
+
+#include "src/hero/HeroClass.h"
+#include "src/skills/SkillClass.h"
+#include "src/artifacts/ArtifactClass.h"
+#include "src/dungeon/DungeonClass.h"
+#include "src/enemy/EnemyClass.h"
+#include "HeaderFiles/locations.h"
+#include "HeaderFiles/function.h"
 
 using namespace std;
 
+HeroClass Hero = HeroClass();
 namespace locations
 {
-    extern void city();
+    extern void city(HeroClass& hero);
     extern void forest();
     extern void tavern();
     extern void buys();
@@ -115,8 +124,9 @@ namespace locations
     }
 
 
-    void city()
+    void city(HeroClass& hero)
     {
+        Hero = hero;
         while (true){
             clear();
             switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес", "Привал(40% востоновления здоровья)"})){

@@ -1,8 +1,6 @@
-#include <iostream>
 #include <string>
-#include <utility>
-#ifndef RPG_ARTIFACTCLASS_H
-#define RPG_ARTIFACTCLASS_H
+#ifndef RPG_ARTIFACTCLASS_CPP
+#define RPG_ARTIFACTCLASS_CPP
 // ArtifactClass(Название, Тип, HP, Мана, ФизУрон, МагУрон, Защита, Знания, Цена);
 
 namespace Artifact {
@@ -73,4 +71,4 @@ private:
         optionally_magic_power,
         optionally_mana;
 };
-#endif //RPG_ARTIFACTCLASS_H
+#endif //RPG_ARTIFACTCLASS_CPP

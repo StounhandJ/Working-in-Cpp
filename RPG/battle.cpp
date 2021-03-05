@@ -1,14 +1,23 @@
-#include "src/enemy/EnemyClass.h"
+#include <windows.h>
+#include <iostream>
+#include "HeaderFiles/function.h"
+
+#include "src/hero/HeroClass.h"
 #include "src/skills/SkillClass.h"
+#include "src/artifacts/ArtifactClass.h"
+#include "src/dungeon/DungeonClass.h"
+#include "src/enemy/EnemyClass.h"
+#include "HeaderFiles/locations.h"
+#include "HeaderFiles/function.h"
 
 using namespace std;
-extern SkillClass listSkills();
+extern SkillClass listSkills(HeroClass hero);
 
 void fight(HeroClass& hero, vector<EnemyClass> enemies){
     bool battle = true;
     bool IsGoal = false;
-    bool menuChoice = true;
-    bool attack = true;
+    bool menuChoice;
+    bool attack;
     int damage = 0;
     int enemyAttack = 0;
     SkillClass skill = SkillClass("", 0, 0, 0, 0, false);
@@ -26,7 +35,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
         while (menuChoice) {
             switch (choiceWhile(info, list<string>{"Скилы", "Автоатака"})) {
                 case 1:
-                    skill = listSkills();
+                    skill = listSkills(hero);
                     if (skill.getCost()>hero.getMana()){
                         clear();
                         std::cout << "Недостаточно маны"<< std::endl;
@@ -88,10 +97,10 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
 }
 
 
-SkillClass listSkills(){
+SkillClass listSkills(HeroClass hero){
     list<string> worn_by_skill;
-    for (const auto& skill : Hero.getSkills()) {
+    for (const auto& skill : hero.getSkills()) {
         worn_by_skill.push_back(skill.getInfo());
     }
-    return Hero.getSkills()[choiceWhile("Скилы", worn_by_skill) - 1];
+    return hero.getSkills()[choiceWhile("Скилы", worn_by_skill) - 1];
 }

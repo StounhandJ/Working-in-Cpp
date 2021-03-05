@@ -1,12 +1,15 @@
 #include <iostream>
 #include <string>
 #include <utility>
+#include "src/enemy/enemies/undead.h"
+#include "battle.cpp"
 
 using namespace std;
 
 namespace locations
 {
     extern void city();
+    extern void forest();
     extern void tavern();
     extern void buys();
     extern void sales();
@@ -21,17 +24,29 @@ namespace locations
         exit(11);
     }
 
+    void forest(){
+        Hero = fight(Hero, vector{UndeadEnemies::skeleton, UndeadEnemies::skeleton});
+    }
+
+
     void city()
     {
         while (true){
             clear();
-            switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес"})){
+            switch (choice("Центр города", list<string>{"Пойти в таверну","Пойти в лес", "Привал(40% востоновления здоровья)"})){
                 case 0:
                     if (menu()==1){
                         close_game();
                         return;
                     } break;
                 case 1:tavern();break;
+                case 2:forest();break;
+                case 3:
+                    Hero.useHeal(int(Hero.getMaxHPAll()*0.4));
+                    clear();
+                    std::cout << "Вы спите"<< std::endl;
+                    Sleep(4000);
+                    break;
             }
         }
     }
@@ -124,12 +139,7 @@ namespace locations
             clear();
             string worn_by_skill;
             for (const auto& artifact : Hero.getSkills()) {
-                worn_by_skill+="Название:"+artifact.getName()+
-                        "\nСтихия:"+artifact.getElementName()+
-                        "\nУровень: "+to_string(artifact.getLevel())+
-                        "\nСила:"+to_string(artifact.getPower())+
-                        "\nМана:"+to_string(artifact.getCost())+
-                        "\n-----------------\n";
+                worn_by_skill+=artifact.getInfo()+"\n-----------------\n";
             }
             std::cout << "Скилы\n\n"+ worn_by_skill+"\n"<< std::endl;
             switch (choice("", list<string>{})) {

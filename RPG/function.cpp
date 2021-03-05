@@ -81,3 +81,21 @@ int choice(const string& question, const list<string>& variants){
     return input_int("");
 }
 
+int choiceWhile(const string& question, const list<string>& variants, bool IsZero=false){
+    while (true) {
+        clear();
+        std::cout << question << std::endl;
+        int number = 1;
+        SetColor(White, Blue);
+        for (const auto &variant : variants) {
+            std::cout << to_string(number) + " - " + variant << std::endl;
+            number += 1;
+        }
+        SetColor(White, Black);
+        int result = input_int("");
+        if (((IsZero and result>-1) or result>0) and result<variants.size()+1){
+            return result;
+        }
+    }
+}
+

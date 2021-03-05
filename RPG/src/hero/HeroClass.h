@@ -85,6 +85,8 @@ public:
     }
     int getMaxManaAll()  {return this->maxMana + this->getManaArtifact();}
 
+    bool IsDeath(){return this->dead;}
+
     void addGold(int addGold){
         this->gold+=addGold;
     }
@@ -116,7 +118,7 @@ public:
 
     void useHeal(int heal_HP)
     {
-        this->HP = heal_HP;
+        this->HP += heal_HP;
         if (this->HP > this->getMaxHPAll()){
             this->HP = this->getMaxHPAll();
         }
@@ -124,22 +126,26 @@ public:
 
     void useRegenMana(int regen_mana)
     {
-        this->HP = regen_mana;
-        if (this->HP > this->getMaxManaAll()){
-            this->HP = this->getMaxManaAll();
+        this->mana += regen_mana;
+        if (this->mana > this->getMaxManaAll()){
+            this->mana = this->getMaxManaAll();
         }
     }
 
     int useSkill(int numberSkill){
-        int skillDamage = 0;
         if (numberSkill<=this->skills.size()){
             SkillClass skill = this->skills[numberSkill];
             if (this->mana>=skill.getCost()){
                 this->mana-=skill.getCost();
-                skillDamage = skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6);
+                return int(skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6));
             }
         }
-        return skillDamage;
+        return 0;
+    }
+
+    int useSkill(const SkillClass& skill){
+        this->mana-=skill.getCost();
+        return int(skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6));
     }
 
     void setArtifactHelmet(const ArtifactClass& NewArtifactHelmet){

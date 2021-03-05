@@ -14,6 +14,7 @@ public:
     int getPower() const{return this->power;}
     int getCost() const{return this->cost;}
     int getElement() const{return this->element;}
+    bool IsAreaDamage() const{return this->areaDamage;}
     std::string getElementName() const{
         std::string text;
         switch (this->element) {
@@ -23,8 +24,16 @@ public:
         }
         return text;}
 
-    explicit SkillClass(std::string name, int level, int power, int cost, int element):
-        name(std::move(name)), level(level), power(power), cost(cost), element(element)
+    std::string getInfo() const {
+        return "Название:"+ this->name+
+        "\nСтихия:"+ this->getElementName()+
+        "\nУровень: "+std::to_string(this->level)+
+        "\nСила:"+std::to_string(this->power)+
+        "\nМана:"+std::to_string(this->cost);
+    }
+
+    explicit SkillClass(std::string name, int level, int power, int cost, int element, bool areaDamage):
+        name(std::move(name)), level(level), power(power), cost(cost), element(element), areaDamage(areaDamage)
     {
 
     }
@@ -34,6 +43,7 @@ private:
         power,
         cost,
         element;
+    bool areaDamage;
     std::string name;
 };
 #endif //RPG_SKILLCLASS_H

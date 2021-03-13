@@ -1,5 +1,5 @@
 #include "src/dungeon/DungeonClass.h"
-
+#include "src/bosses/PharaohClass.h"
 #include "src/enemy/enemies/undead.h"
 
 #include "src/artifacts/sets/UndeadArtifact.h"
@@ -35,7 +35,8 @@ DungeonClass LiteDungeon = DungeonClass("Легкое подземелье", 4, 
                                         MummyArtifact::armor,
                                         MummyArtifact::hands,
                                         MummyArtifact::legs,
-                                        } // Выпадающие предметы
+                                        }, // Выпадающие предметы
+                                        Pharaoh
                                         );
 
 #endif //RPG_LITEDUNGEON_H

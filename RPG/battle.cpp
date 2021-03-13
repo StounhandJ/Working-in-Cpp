@@ -12,6 +12,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
     bool menuChoice = true;
     bool attack = true;
     int damage = 0;
+    int element = SkillElement::NON_ELEMENT;
     int enemyAttack = 0;
     SkillClass skill = SkillClass("", 0, 0, 0, 0, false);
     ArmyClass army = ArmyClass("", 0, 0, 0, 0, 0, 0, 0);
@@ -38,6 +39,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
                     army = listArmies();
                     IsGoal = false;
                     damage = army.getDamageAll();
+                    element = army.getElement();
                     menuChoice = false;
                     break;
                 case 2:
@@ -50,10 +52,12 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
                     }
                     IsGoal = !skill.IsAreaDamage();
                     damage = hero.useSkill(skill);
+                    element = skill.getElement();
                     menuChoice = false;
                     break;
                 case 3:
                     damage = hero.getDamageAll();
+                    element = SkillElement::NON_ELEMENT;
                     IsGoal = true;
                     menuChoice = false;
                     break;
@@ -66,11 +70,11 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
             for(auto enemy : enemies){
                 enemiesInfo.push_back(enemy.getName()+" HP "+to_string(int(100.0/enemy.getMaxHP()*enemy.getHP()))+"%");
             }
-            enemies[choiceWhile("Выбирите противника ", enemiesInfo)-1].dealt_damage(damage);
+            enemies[choiceWhile("Выбирите противника ", enemiesInfo)-1].dealt_damage(damage,element);
         }
         else{
             for(auto& enemy : enemies){
-                enemy.dealt_damage(damage);
+                enemy.dealt_damage(damage,element);
             }
         }
 
@@ -104,6 +108,101 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
         hero.check_IsDeathArmies();
     }
     hero.useRegenMana(999999);
+}
+
+int fight_Boss(HeroClass& hero, HeroClass boss){
+    bool battle = true;
+    bool menuChoice = true;
+    bool attack = true;
+    int damage = 0;
+    int element = SkillElement::NON_ELEMENT;
+    int damageBoss = 0;
+    int elementBoss = SkillElement::NON_ELEMENT;
+    SkillClass skill = SkillClass("", 0, 0, 0, 0, false);
+    ArmyClass army = ArmyClass("", 0, 0, 0, 0, 0, 0, 0);
+    string info;
+    while (battle) {
+        menuChoice = true;
+        attack = true;
+        // Информация и выбор действия //
+        info = "Босс: "+boss.getHeroName()+"\nHP: "+to_string(boss.getHP())+" \n";
+        info += "\nВы:\nHP: " + to_string(hero.getHP()) + "/" + to_string(hero.getMaxHPAll()) +
+                "; Мана: " + to_string(hero.getMana()) + "/" + to_string(hero.getMaxManaAll());
+        while (menuChoice) {
+            switch (choiceWhile(info, list<string>{"Армия", "Скилы", "Автоатака"})) {
+                case 1:
+                    if (hero.getArmies().empty()) {
+                        clear();
+                        std::cout << "Нет войск" << std::endl;
+                        Sleep(1000);
+                        break;
+                    }
+                    army = listArmies();
+                    damage = army.getDamageAll();
+                    element = army.getElement();
+                    menuChoice = false;
+                    break;
+                case 2:
+                    skill = listSkills();
+                    if (skill.getCost() > hero.getMana()) {
+                        clear();
+                        std::cout << "Недостаточно маны" << std::endl;
+                        Sleep(1000);
+                        break;
+                    }
+                    damage = hero.useSkill(skill);
+                    element = skill.getElement();
+                    menuChoice = false;
+                    break;
+                case 3:
+                    damage = hero.getDamageAll();
+                    element = SkillElement::NON_ELEMENT;
+                    menuChoice = false;
+                    break;
+            }
+        }
+        // Нанесение урона //
+        boss.dealt_damage(damage, element);
+        // Проверка //
+        if (boss.IsDeath()){
+            battle = false;
+            return 1;
+        }
+        // Атака босса //
+        int number = 0;
+        for (const auto& skillBoss : boss.getSkills()){
+            if(boss.getMana()<skillBoss.getCost()){
+                number+=1;
+            }
+        }
+        if(number>0){
+            while (attack){
+                auto skillBoss = boss.getSkills()[randInt(0,boss.getSkills().size()-1)];
+                if (skillBoss.getCost()<boss.getMana()){
+                    damageBoss = boss.useSkill(skillBoss);
+                    elementBoss = skillBoss.getElement();
+                    info = skillBoss.getName();
+                    attack = false;
+                }
+            }
+        }
+        else{
+            info = "Автоатака";
+            damageBoss = boss.getDamageAll();
+            elementBoss = SkillElement::NON_ELEMENT;
+        }
+        clear();
+        std::cout << "Босс атаковал "+info << std::endl;
+        Sleep(1000);
+        hero.dealt_damage(damageBoss, elementBoss);
+
+        // Проверка //
+        if (hero.IsDeath()){
+            battle = false;
+            return 0;
+        }
+    }
+    return 1;
 }
 
 ArmyClass listArmies(){

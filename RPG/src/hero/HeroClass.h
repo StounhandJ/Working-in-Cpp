@@ -258,7 +258,6 @@ public:
     {
         this->HeroName = "None";
         this->GradeName = "None";
-        this->dead = true;
         this->HP = 100;
         this->mana = 100;
         this->level = 1;
@@ -272,7 +271,7 @@ public:
 
 protected:
 
-    bool dead;
+    bool dead = true;
     std::string HeroName,
                 GradeName;
     ArtifactClass ArtifactHelmet = ArtifactClass("Пусто", Artifact::HELMET),

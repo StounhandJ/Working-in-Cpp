@@ -1,5 +1,5 @@
 #include <vector>
-
+#include "src/hero/HeroClass.h"
 #include "src/artifacts/ArtifactClass.h"
 #include "src/enemy/EnemyClass.h"
 #ifndef RPG_DUNGEONCLASS_H
@@ -17,6 +17,7 @@ public:
     int getMaxCountEnemyLevel() const{return this->maxCountEnemyLevel;}
     int getMinCountEnemyLevel() const{return this->minCountEnemyLevel;}
     int getChanceMeetEnemies() const{return this->chanceMeetEnemies;}
+    HeroClass getBoss() const{return this->boss;}
 
     std::vector<EnemyClass> getEnemies(int count){
         std::vector<EnemyClass> listEnemies;
@@ -34,8 +35,8 @@ public:
         return listArtifacts;
     }
 
-    explicit DungeonClass(std::string name, int levelCount, int minCountEnemyLevel, int maxCountEnemyLevel,int chanceMeetEnemies,std::vector<EnemyClass> enemies, std::vector<ArtifactClass> artifacts):
-    name(std::move(name)),levelCount(levelCount), minCountEnemyLevel(minCountEnemyLevel), maxCountEnemyLevel(maxCountEnemyLevel), chanceMeetEnemies(chanceMeetEnemies), enemies(enemies), artifacts(artifacts)
+    explicit DungeonClass(std::string name, int levelCount, int minCountEnemyLevel, int maxCountEnemyLevel,int chanceMeetEnemies,std::vector<EnemyClass> enemies, std::vector<ArtifactClass> artifacts, HeroClass boss):
+    name(std::move(name)),levelCount(levelCount), minCountEnemyLevel(minCountEnemyLevel), maxCountEnemyLevel(maxCountEnemyLevel), chanceMeetEnemies(chanceMeetEnemies), enemies(enemies), artifacts(artifacts), boss(boss)
     {
 
     }
@@ -44,6 +45,7 @@ protected:
     std::string name{};
     std::vector<EnemyClass> enemies{};
     std::vector<ArtifactClass> artifacts{};
+    HeroClass boss{};
     int levelCount{},
         minCountEnemyLevel{},
         maxCountEnemyLevel{},

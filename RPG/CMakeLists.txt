@@ -19,4 +19,4 @@ add_executable(RPG
         src/enemy/enemies/undead.h
         # Подземелья #
         src/dungeon/dungeons/LiteDungeon.h
-        src/army/armies/Elves.h)
+        src/army/armies/Elves.h src/bosses/PharaohClass.h src/skills/sets/PharaohSkills.h)

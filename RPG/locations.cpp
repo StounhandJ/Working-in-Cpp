@@ -83,6 +83,8 @@ namespace locations
             }
         }
         clear();
+        int res =  fight_Boss(Hero, dungeon.getBoss());
+        if (res==0){return 1;}
         string text = "Вы прошли данж!\nВот ваш лут:\n";
         std::vector<ArtifactClass> listArtifacts = dungeon.getArtifacts(randInt(3,6));
         for (const auto& artifact : listArtifacts){

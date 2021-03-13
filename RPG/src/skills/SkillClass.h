@@ -8,6 +8,34 @@
 
 namespace SkillElement {
     int const NON_ELEMENT = 0;
+    int const LIGHT = 1;
+    int const DARK = 2;
+    int const SPOILAGE = 3;
+    int const FIRE = 4;
+    int const WATER = 5;
+    std::string getElementName(int element){
+        std::string text;
+        switch (element) {
+            case SkillElement::NON_ELEMENT:
+                text = "Нет";
+                break;
+            case SkillElement::LIGHT:
+                text = "Свет";
+                break;
+            case SkillElement::DARK:
+                text = "Тьма";
+                break;
+            case SkillElement::SPOILAGE:
+                text = "Порча";
+                break;
+            case SkillElement::FIRE:
+                text = "Огонь";
+                break;
+            case SkillElement::WATER:
+                text = "Вода";
+                break;
+        }
+        return text;}
 }
 
 class SkillClass {
@@ -18,18 +46,10 @@ public:
     int getCost() const{return this->cost;}
     int getElement() const{return this->element;}
     bool IsAreaDamage() const{return this->areaDamage;}
-    std::string getElementName() const{
-        std::string text;
-        switch (this->element) {
-            case SkillElement::NON_ELEMENT:
-                text = "Нет";
-                break;
-        }
-        return text;}
 
     std::string getInfo() const {
         return "Название:"+ this->name+
-        "\nСтихия:"+ this->getElementName()+
+        "\nСтихия:"+ SkillElement::getElementName(this->element)+
         "\nУровень: "+std::to_string(this->level)+
         "\nСила:"+std::to_string(this->power)+
         "\nМана:"+std::to_string(this->cost);

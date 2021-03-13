@@ -6,6 +6,7 @@
 
 #include "src/skills/SkillClass.h"
 #include "src/artifacts/ArtifactClass.h"
+#include "src/army/ArmyClass.h"
 
 #ifndef RPG_HERO_H
 #define RPG_HERO_H
@@ -21,8 +22,9 @@ class HeroClass {
 public:
     std::string getHeroName() const{return this->HeroName;}
     std::string getGradeName() const{return this->GradeName;}
-    std::vector <SkillClass> getSkills() const{return this->skills;}
+    std::vector <SkillClass> getSkills() {return this->skills;}
     std::vector <SkillClass> getAllSkillsGrade() const{return this->allSkillsGrade;}
+    std::vector <ArmyClass> getArmies() {return this->armies;}
     int getHP() {return this->HP;}
     int getLevel() {return this->level;}
     int getExperience() {return this->experience;}
@@ -98,6 +100,11 @@ public:
         this->gold+=addGold;
     }
 
+    void spendGold(int spendGold)
+    {
+        this->gold-=spendGold;
+    }
+
     void addExperience(int addExperience){
         this->experience+=addExperience;
         this->check_level();
@@ -116,10 +123,28 @@ public:
         }
     }
 
-    void dealt_damage(int dealtDamage)
+    void dealt_damage(int dealtDamage, int elementAttacks=0)
     {
-        this->HP-=int(dealtDamage*this->getDefensePercentage());
+        if (!this->armies.empty()){
+            this->armies[this->randInt(0, this->armies.size()-1)].dealt_damage(int(dealtDamage*0.3),elementAttacks);
+            dealtDamage = int(dealtDamage*0.7);
+        }
+        dealtDamage=int(dealtDamage*this->getDefensePercentage());
+        dealtDamage = elementAttacks==this->vulnerabilityElement?int(dealtDamage*1.5):dealtDamage;
+        this->HP-=dealtDamage;
         this->check_death();
+    }
+
+    void check_IsDeathArmies(){
+        int number = 0;
+        std::vector<int> numbers;
+        for(auto army : this->armies){
+            if(army.IsDeath()){
+                this->armies.erase(this->armies.begin()+number);
+                number-=1;
+            }
+            number+=1;
+        }
     }
 
     void useHeal(int heal_HP)
@@ -128,6 +153,23 @@ public:
         if (this->HP > this->getMaxHPAll()){
             this->HP = this->getMaxHPAll();
         }
+    }
+
+    void healArmy()
+    {
+        for (auto army : this->armies) {
+            army.useHeal();
+        }
+    }
+
+    void newArmy(const ArmyClass& NewArmy){
+        for (auto& army : this->armies) {
+            if (army.getName()==NewArmy.getName()){
+                army.addCount(NewArmy.getCount());
+                return;
+            }
+        }
+        this->armies.push_back(NewArmy);
     }
 
     void useRegenMana(int regen_mana)
@@ -243,6 +285,7 @@ protected:
             ArtifactLegs = ArtifactClass("Пусто", Artifact::LEGS);
     std::vector<ArtifactClass> inventory{};
     std::vector <SkillClass> skills{};
+    std::vector <ArmyClass> armies{};
     std::vector <SkillClass> allSkillsGrade{};
 
     int HP{},
@@ -255,7 +298,8 @@ protected:
         magic_power{},
         mana{},
         maxMana{},
-        gold{};
+        gold{},
+        vulnerabilityElement=-1;
 
     void check_death(){
         if (HP<1){
@@ -291,6 +335,13 @@ protected:
         level+=1;
     }
 
+    int randInt(int from, int before){
+        int number = std::rand()%(before+1);
+        if(number<from){
+            number+=from;
+        }
+    return number;
+}
 };
 
 

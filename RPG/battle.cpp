@@ -1,8 +1,10 @@
 #include "src/enemy/EnemyClass.h"
 #include "src/skills/SkillClass.h"
+#include "src/army/ArmyClass.h"
 
 using namespace std;
 extern SkillClass listSkills();
+extern ArmyClass listArmies();
 
 void fight(HeroClass& hero, vector<EnemyClass> enemies){
     bool battle = true;
@@ -12,6 +14,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
     int damage = 0;
     int enemyAttack = 0;
     SkillClass skill = SkillClass("", 0, 0, 0, 0, false);
+    ArmyClass army = ArmyClass("", 0, 0, 0, 0, 0, 0, 0);
     string info;
     while (battle){
         menuChoice = true;
@@ -24,8 +27,20 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
         info+="\nВы:\nHP: "+to_string(hero.getHP()) + "/" + to_string(hero.getMaxHPAll())+
                 "; Мана: "+to_string(hero.getMana())+ "/" + to_string(hero.getMaxManaAll());
         while (menuChoice) {
-            switch (choiceWhile(info, list<string>{"Скилы", "Автоатака"})) {
+            switch (choiceWhile(info, list<string>{"Армия" ,"Скилы", "Автоатака"})) {
                 case 1:
+                    if(hero.getArmies().empty()){
+                        clear();
+                        std::cout << "Нет войск"<< std::endl;
+                        Sleep(1000);
+                        break;
+                    }
+                    army = listArmies();
+                    IsGoal = false;
+                    damage = army.getDamageAll();
+                    menuChoice = false;
+                    break;
+                case 2:
                     skill = listSkills();
                     if (skill.getCost()>hero.getMana()){
                         clear();
@@ -37,7 +52,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
                     damage = hero.useSkill(skill);
                     menuChoice = false;
                     break;
-                case 2:
+                case 3:
                     damage = hero.getDamageAll();
                     IsGoal = true;
                     menuChoice = false;
@@ -74,7 +89,7 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
         if (!enemies.empty()) {
             while (attack) {
                 if (enemyAttack < enemies.size()) {
-                    hero.dealt_damage(enemies[enemyAttack].getDamage());
+                    hero.dealt_damage(enemies[enemyAttack].getDamage(),enemies[enemyAttack].getElement());
                     attack = false;
                 }
                 enemyAttack = enemyAttack < enemies.size()?enemyAttack+1:0;
@@ -83,10 +98,21 @@ void fight(HeroClass& hero, vector<EnemyClass> enemies){
 
         // Проверка кона боя //
         battle=!(enemies.empty() or hero.IsDeath());
+
+        // Лечение армий //
+        hero.healArmy();
+        hero.check_IsDeathArmies();
     }
     hero.useRegenMana(999999);
 }
 
+ArmyClass listArmies(){
+    list<string> armies;
+    for (const auto& army : Hero.getArmies()) {
+        armies.push_back(army.getInfo());
+    }
+    return Hero.getArmies()[choiceWhile("Армии", armies) - 1];
+}
 
 SkillClass listSkills(){
     list<string> worn_by_skill;

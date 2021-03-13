@@ -14,6 +14,7 @@ public:
     int getDamage() {return this->damage;}
     int getDefense() {return this->defense;}
     int getExperience() {return this->experience;}
+    int getElement() {return this->element;}
     bool IsDeath(){return this->dead;}
     double getDefensePercentage() {return 100 / (100 + (double)this->getDefense());}
 
@@ -21,14 +22,16 @@ public:
         this->dead = true;
     }
 
-    void dealt_damage(int dealtDamage)
+    void dealt_damage(int dealtDamage, int elementAttacks=0)
     {
-        this->HP-=int(dealtDamage*this->getDefensePercentage());
+        dealtDamage=int(dealtDamage*this->getDefensePercentage());
+        dealtDamage = elementAttacks==this->vulnerabilityElement?int(dealtDamage*1.5):dealtDamage;
+        this->HP-=dealtDamage;
         this->check_death();
     }
 
-    explicit EnemyClass(std::string name, int HP, int damage, int defense, int experience):
-            name(std::move(name)), maxHP(HP), damage(damage), defense(defense), experience(experience)
+    explicit EnemyClass(std::string name, int HP, int damage, int defense, int experience,int element,int vulnerabilityElement=-1):
+            name(std::move(name)), maxHP(HP), damage(damage), defense(defense), experience(experience),element(element), vulnerabilityElement(vulnerabilityElement)
     {
         this->HP=maxHP;
     }
@@ -39,7 +42,9 @@ protected:
         maxHP{},
         damage{},
         defense{},
-        experience{};
+        experience{},
+        element{},
+        vulnerabilityElement=-1;
     bool dead=false;
 
     void check_death(){

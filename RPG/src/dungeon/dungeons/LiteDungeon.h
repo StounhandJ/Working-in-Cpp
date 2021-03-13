@@ -7,7 +7,7 @@
 #define RPG_LITEDUNGEON_H
 
 DungeonClass LiteDungeon = DungeonClass("Легкое подземелье", 4, 1,2,70,
-                                        vector{
+                                        std::vector{
                                         UndeadEnemies::skeleton,
                                         UndeadEnemies::skeleton,
                                         UndeadEnemies::skeleton,
@@ -20,7 +20,7 @@ DungeonClass LiteDungeon = DungeonClass("Легкое подземелье", 4, 
                                         UndeadEnemies::mummy,
                                         UndeadEnemies::vampire
                                         }, // Противники в данже
-                                        vector{
+                                        std::vector{
                                         SkeletonArtifact::helmet,
                                         SkeletonArtifact::armor,
                                         SkeletonArtifact::hands,

@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-#include <utility>
 #ifndef RPG_ENEMYCLASS_H
 #define RPG_ENEMYCLASS_H
 // EnemyClass(Имя, HP, Урон, Защита, ПолучаемыйОпыт)

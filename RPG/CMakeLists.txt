@@ -7,7 +7,7 @@ add_executable(RPG
         # Стартовый файл#
         main.cpp
         # Основные классы #
-        src/hero/HeroClass.h src/skills/SkillClass.h src/artifacts/ArtifactClass.h src/dungeon/DungeonClass.h src/enemy/EnemyClass.h src/army/ArmyClass.h
+        src/hero/HeroClass.h src/skills/SkillClass.h src/artifacts/ArtifactClass.h src/dungeon/DungeonClass.h src/enemy/EnemyClass.h
         # Классы персонажей #
         src/hero/grade/WarriorClass.h src/hero/grade/ArcherClass.h src/hero/grade/MagClass.h
         # Сеты артефактов #
@@ -19,4 +19,4 @@ add_executable(RPG
         src/enemy/enemies/undead.h
         # Подземелья #
         src/dungeon/dungeons/LiteDungeon.h
-        src/army/armies/Elves.h)
+        )

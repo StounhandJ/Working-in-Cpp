@@ -1,8 +1,4 @@
-#include <iostream>
-#include <string>
-#include <utility>
 #include <vector>
-#include <list>
 
 #include "src/artifacts/ArtifactClass.h"
 #include "src/enemy/EnemyClass.h"
@@ -38,7 +34,7 @@ public:
         return listArtifacts;
     }
 
-    explicit DungeonClass(std::string name, int levelCount, int minCountEnemyLevel, int maxCountEnemyLevel,int chanceMeetEnemies,vector<EnemyClass> enemies, vector<ArtifactClass> artifacts):
+    explicit DungeonClass(std::string name, int levelCount, int minCountEnemyLevel, int maxCountEnemyLevel,int chanceMeetEnemies,std::vector<EnemyClass> enemies, std::vector<ArtifactClass> artifacts):
     name(std::move(name)),levelCount(levelCount), minCountEnemyLevel(minCountEnemyLevel), maxCountEnemyLevel(maxCountEnemyLevel), chanceMeetEnemies(chanceMeetEnemies), enemies(enemies), artifacts(artifacts)
     {
 

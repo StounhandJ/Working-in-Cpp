@@ -1,6 +1,4 @@
-#include <iostream>
 #include <string>
-#include <utility>
 #ifndef RPG_SKILLCLASS_H
 #define RPG_SKILLCLASS_H
 // SkillClass(Название, Уровень, Урон, ЦенаМаны, ТипЕлемента, МасовыйЛиУрон)

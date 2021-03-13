@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <utility>
-#include <list>
 #include <vector>
 
 #include "src/skills/SkillClass.h"

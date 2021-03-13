@@ -1,7 +1,3 @@
-#include <iostream>
-#include <string>
-#include <utility>
-#include <map>
 #include "src/hero/HeroClass.h"
 #include "src/artifacts/sets/MagArtifact.h"
 #include "src/skills/sets/MagSkills.h"

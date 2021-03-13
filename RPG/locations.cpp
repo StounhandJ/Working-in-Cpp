@@ -2,6 +2,7 @@
 #include <string>
 #include <utility>
 #include "src/dungeon/dungeons/LiteDungeon.h"
+#include "src/army/armies/Elves.h"
 #include "battle.cpp"
 
 using namespace std;
@@ -14,6 +15,7 @@ namespace locations
     extern void buys();
     extern void sales();
     extern void inventory();
+    extern void listArmies();
     extern void listSkills();
     extern int menu();
 
@@ -157,8 +159,21 @@ namespace locations
     void buys(){
         while (true) {
             clear();
-            switch (choice("Покупка !ТУТ ПУСТО!", list<string>{})){
+            switch (choice("Покупка", list<string>{"Воины эльфы 350 золотых"})){
                 case 0:return;
+                case 1:
+                    if (Hero.getGold()>=100){
+                        Hero.newArmy(Elves::warElves);
+                        Hero.spendGold(100);
+                        clear();
+                        std::cout << "Куплено"<< std::endl;
+                        Sleep(1000);
+                        break;
+                    }
+                    clear();
+                    std::cout << "Недостаточно золота"<< std::endl;
+                    Sleep(1000);
+                    break;
             }
         }
     }
@@ -220,6 +235,21 @@ namespace locations
         }
     }
 
+    void listArmies(){
+        while (true) {
+            clear();
+            string armies;
+            for (const auto& army : Hero.getArmies()) {
+                armies+=army.getInfo()+"\n-----------------\n";
+            }
+            std::cout << "Армии\n\n"+ armies+"\n"<< std::endl;
+            switch (choice("", list<string>{})) {
+                case 0:
+                    return;
+            }
+        }
+    }
+
     void listSkills(){
         while (true) {
             clear();
@@ -253,13 +283,12 @@ namespace locations
             statistics+="Знания: "+to_string(Hero.getKnowledgeAll())+" +"+to_string(Hero.getKnowledgeArtifact())+" доп.маг.урон "+to_string((int)(Hero.getKnowledgePercentage()*100))+"%"+"\n";
             statistics+="Золото: "+to_string(Hero.getGold())+"\n";
             std::cout << statistics << std::endl;
-            switch (choice("", list<string>{"Инвентарь" ,"Список скилов", "Выход из игры"})){
+            switch (choice("", list<string>{"Инвентарь" ,"Список скилов","Армии","Выход из игры"})){
                 case 0:return 0;break;
-                case 1:
-                    inventory();
-                    break;
+                case 1:inventory();break;
                 case 2:listSkills();break;
-                case 3:return 1;break;
+                case 3:listArmies();break;
+                case 4:return 1;break;
             }
         }
     }

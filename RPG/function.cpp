@@ -22,9 +22,9 @@ std::basic_string<Char, Traits, Allocator> operator*
 };
 
 void clear() {
-//    system("cls");
-    string indent = "\n";
-    cout << indent * 40;
+    system("cls");
+//    string indent = "\n";
+//    cout << indent * 40;
 };
 
 int input_int(const string& name)

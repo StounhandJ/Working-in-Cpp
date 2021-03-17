@@ -2,6 +2,8 @@
 #include <string>
 #include <utility>
 #include "src/dungeon/dungeons/LiteDungeon.h"
+#include "src/dungeon/dungeons/AverageDungeon.h"
+#include "src/dungeon/dungeons/HardDungeon.h"
 #include "src/army/armies/Elves.h"
 #include "battle.cpp"
 
@@ -99,7 +101,7 @@ namespace locations
     void forest(){
         while (true){
             clear();
-            switch (choice("Центр города", list<string>{"Легкое подземелье","Пойти в город"})){
+            switch (choice("Центр города", list<string>{"Легкое подземелье","Среднее подземелье","Сложное подземелье","Пойти в город"})){
                 case 0:
                     if (menu()==1){
                         close_game();
@@ -113,7 +115,23 @@ namespace locations
                         return;
                     }
                     break;
-                case 2:return;
+                case 2:
+                    if(input_dungeon(AverageDungeon)==1){
+                        std::cout << "Персонаж умер!" << std::endl;
+                        Sleep(2000);
+                        Hero.spawn();
+                        return;
+                    }
+                    break;
+                case 3:
+                    if(input_dungeon(HardDungeon)==1){
+                        std::cout << "Персонаж умер!" << std::endl;
+                        Sleep(2000);
+                        Hero.spawn();
+                        return;
+                    }
+                    break;
+                case 4:return;
             }
         }
     }
@@ -159,24 +177,45 @@ namespace locations
     }
 
     void buys(){
+        int price = 0;
+        ArmyClass army = ArmyClass("", 0 ,0 ,0,0,0,0, 0);
         while (true) {
             clear();
-            switch (choice("Покупка", list<string>{"Воины эльфы 350 золотых"})){
+            switch (choice("Покупка", list<string>{"Воины эльфы 350 золотых","Лучники эльфы 400 золотых","Маги эльфы 300 золотых","Асасины эльфы 320 золотых"})){
                 case 0:return;
                 case 1:
-                    if (Hero.getGold()>=100){
-                        Hero.newArmy(Elves::warElves);
-                        Hero.spendGold(100);
-                        clear();
-                        std::cout << "Куплено"<< std::endl;
-                        Sleep(1000);
-                        break;
-                    }
-                    clear();
-                    std::cout << "Недостаточно золота"<< std::endl;
-                    Sleep(1000);
+                    price = 350;
+                    army = Elves::warElves;
+                    break;
+                case 2:
+                    price = 400;
+                    army = Elves::archerElves;
+                    break;
+                case 3:
+                    price = 300;
+                    army = Elves::magElves;
+                    break;
+                case 4:
+                    price = 320;
+                    army = Elves::assassinElves;
                     break;
             }
+
+            if(price>0) {
+                if (Hero.getGold() >= price) {
+                    Hero.newArmy(army);
+                    Hero.spendGold(price);
+                    clear();
+                    std::cout << "Куплено" << std::endl;
+                    Sleep(1000);
+                    break;
+                } else {
+                    clear();
+                    std::cout << "Недостаточно золота" << std::endl;
+                    Sleep(1000);
+                }
+            }
+            price = 0;
         }
     }
 

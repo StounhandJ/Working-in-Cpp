@@ -3,20 +3,20 @@
 #include "src/skills/sets/PharaohSkills.h"
 #include "src/army/armies/Elves.h"
 
-#ifndef RPG_PHARAOHCLASS_H
-#define RPG_PHARAOHCLASS_H
-class PharaohClass : public HeroClass {
+#ifndef RPG_LICHCLASS_H
+#define RPG_LICHCLASS_H
+class LichClass : public HeroClass {
 public:
 
-    explicit PharaohClass()
+    explicit LichClass()
     {
         this->GradeName = "Босс";
-        this->HeroName = "Фараон";
-        this->HP = 9000;
+        this->HeroName = "Лич";
+        this->HP = 15000;
         this->maxHP = 9000;
-        this->mana = 700;
-        this->damage = 100;
-        this->defense = 55;
+        this->mana = 1400;
+        this->damage = 200;
+        this->defense = 130;
         this->dead = false;
         this->setArtifactHelmet(WarriorArtifact::helmet);
         this->setArtifactArmor(WarriorArtifact::armor);
@@ -31,6 +31,5 @@ public:
         this->armies={Elves::warElves};
     }
 };
-HeroClass Pharaoh = PharaohClass();
-
-#endif //RPG_PHARAOHCLASS_H
+HeroClass Lich = LichClass();
+#endif //RPG_LICHCLASS_H

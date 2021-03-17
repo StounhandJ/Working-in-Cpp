@@ -2,6 +2,7 @@
 #include "src/hero/grade/WarriorClass.h"
 #include "src/hero/grade/ArcherClass.h"
 #include "src/hero/grade/MagClass.h"
+#include "src/hero/grade/AssassinClass.h"
 HeroClass Hero = HeroClass();
 
 
@@ -19,10 +20,11 @@ void registration(){
     bool set_grade = true;
     while (set_grade){
         clear();
-        switch (choice("Выбирите класс", list<string>{"Воин", "Лучник", "Маг"})) {
+        switch (choice("Выбирите класс", list<string>{"Воин", "Лучник", "Маг", "Ассасин"})) {
             case 1: Hero = WarriorClass(name);set_grade=false;break;
             case 2: Hero = ArcherClass(name);set_grade=false;break;
             case 3: Hero = MagClass(name);set_grade=false;break;
+            case 4: Hero = AssassinClass(name);set_grade=false;break;
         }
     }
     bool set_skill = true;

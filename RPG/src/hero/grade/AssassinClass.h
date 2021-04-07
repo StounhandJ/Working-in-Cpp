@@ -16,10 +16,10 @@ public:
         this->maxMana = 100;
         this->damage = 35;
         this->defense = 20;
-        this->setArtifactHelmet(AssassinArtifact::helmet);
-        this->setArtifactArmor(AssassinArtifact::armor);
-        this->setArtifactHands(AssassinArtifact::hands);
-        this->setArtifactLegs(AssassinArtifact::legs);
+        this->ArtifactHelmet = AssassinArtifact::helmet;
+        this->ArtifactArmor = AssassinArtifact::armor;
+        this->ArtifactHands = AssassinArtifact::hands;
+        this->ArtifactLegs = AssassinArtifact::legs;
         this->allSkillsGrade={
                 AssassinSkills::strongBlow,
                 AssassinSkills::HiddenImpact,

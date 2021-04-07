@@ -16,10 +16,10 @@ public:
         this->maxMana = 150;
         this->damage = 20;
         this->defense = 15;
-        this->setArtifactHelmet(ArcherArtifact::helmet);
-        this->setArtifactArmor(ArcherArtifact::armor);
-        this->setArtifactHands(ArcherArtifact::hands);
-        this->setArtifactLegs(ArcherArtifact::legs);
+        this->ArtifactHelmet = ArcherArtifact::helmet;
+        this->ArtifactArmor = ArcherArtifact::armor;
+        this->ArtifactHands = ArcherArtifact::hands;
+        this->ArtifactLegs = ArcherArtifact::legs;
         this->allSkillsGrade={
                 ArcherSkills::daggerStrike,
                 ArcherSkills::lightArrow,

@@ -24,6 +24,7 @@ namespace locations
 
     void close_game(){
         clear();
+        Hero.save();
         std::cout << "Bye ; )" << std::endl;
         exit(11);
     }

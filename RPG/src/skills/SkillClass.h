@@ -1,6 +1,8 @@
 #include <string>
+#include "nlohmann/json.hpp"
 #ifndef RPG_SKILLCLASS_H
 #define RPG_SKILLCLASS_H
+using json = nlohmann::json;
 // SkillClass(Название, Уровень, Урон, ЦенаМаны, ТипЕлемента, МасовыйЛиУрон)
 
 
@@ -57,6 +59,26 @@ public:
         name(std::move(name)), level(level), power(power), cost(cost), element(element), areaDamage(areaDamage)
     {
 
+    }
+
+    json getSave()
+    {
+        return json{
+                {"name", name},
+                {"level", level},
+                {"power", power},
+                {"cost", cost},
+                {"element", element},
+                {"areaDamage", areaDamage}
+
+        };
+    }
+
+    static SkillClass Load(json data)
+    {
+        return  SkillClass(data["name"].get<std::string>(), data["level"].get<int>(),
+                data["power"].get<int>(), data["cost"].get<int>(),
+                data["element"].get<int>(), data["areaDamage"].get<bool>());
     }
 
 private:

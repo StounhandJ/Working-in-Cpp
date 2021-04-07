@@ -3,6 +3,9 @@
 #include "src/hero/grade/ArcherClass.h"
 #include "src/hero/grade/MagClass.h"
 #include "src/hero/grade/AssassinClass.h"
+#include "Headers/ManagementSave.h"
+
+
 HeroClass Hero = HeroClass();
 
 
@@ -17,6 +20,18 @@ using namespace std;
 
 void registration(){
     string name = input_str("имя персонажа");
+    if (ManagementSave::checkSave(name))
+    {
+        if(choice("Хотите загрузить сохранение", list<string>{"Да", "Нет"})==1) {
+            string grade = ManagementSave::getGrade(name);
+            if (grade == "Воин") Hero = WarriorClass(name);
+            else if (grade == "Лучник") Hero = ArcherClass(name);
+            else if (grade == "Маг") Hero = MagClass(name);
+            else if (grade == "Ассасин") Hero = AssassinClass(name);
+            Hero.load(ManagementSave::getSave(name));
+            return;
+        }
+    }
     bool set_grade = true;
     while (set_grade){
         clear();

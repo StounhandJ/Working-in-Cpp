@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.17)
 project(RPG)
+include(FetchContent)
+
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+  GIT_TAG v3.9.1)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+  FetchContent_Populate(json)
+  add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -24,4 +36,7 @@ add_executable(RPG
         src/army/armies/Elves.h
         # Боссы #
         src/bosses/PharaohClass.h src/bosses/LichClass.h
-        )
+        ManagementSave.cpp Headers/ManagementSave.h)
+
+target_link_libraries(RPG PRIVATE nlohmann_json::nlohmann_json)
+

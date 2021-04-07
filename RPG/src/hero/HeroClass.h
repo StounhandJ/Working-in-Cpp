@@ -1,4 +1,7 @@
 #include <vector>
+#include <iostream>
+#include <fstream>
+#include "nlohmann/json.hpp"
 
 #include "src/skills/SkillClass.h"
 #include "src/artifacts/ArtifactClass.h"
@@ -6,6 +9,8 @@
 
 #ifndef RPG_HERO_H
 #define RPG_HERO_H
+#include "Headers/ManagementSave.h"
+using json = nlohmann::json;
 // Parent Class
 // При инецализации нужно указать GradeName и HeroName
 // Остальные параметры на усматрения
@@ -94,16 +99,19 @@ public:
 
     void addGold(int addGold){
         this->gold+=addGold;
+        this->save();
     }
 
     void spendGold(int spendGold)
     {
         this->gold-=spendGold;
+        this->save();
     }
 
     void addExperience(int addExperience){
         this->experience+=addExperience;
         this->check_level();
+        this->save();
     }
 
     void death(){
@@ -117,6 +125,7 @@ public:
             this->mana = this->getMaxManaAll();
             this->dead = false;
         }
+        this->save();
     }
 
     void dealt_damage(int dealtDamage, int elementAttacks=0)
@@ -129,6 +138,7 @@ public:
         dealtDamage = elementAttacks==this->vulnerabilityElement?int(dealtDamage*1.5):dealtDamage;
         this->HP-=dealtDamage;
         this->check_death();
+        this->save();
     }
 
     void check_IsDeathArmies(){
@@ -149,6 +159,7 @@ public:
         if (this->HP > this->getMaxHPAll()){
             this->HP = this->getMaxHPAll();
         }
+        this->save();
     }
 
     void healArmy()
@@ -166,6 +177,7 @@ public:
             }
         }
         this->armies.push_back(NewArmy);
+        this->save();
     }
 
     void useRegenMana(int regen_mana)
@@ -192,8 +204,9 @@ public:
         return int(skill.getPower()+(skill.getPower()*this->getKnowledgePercentage())+(this->magic_power*0.6));
     }
 
-    void newArtifactInventory(const ArtifactClass& NewArtifact){
+    void newArtifactInventory(const ArtifactClass NewArtifact){
         this->inventory.push_back(NewArtifact);
+        this->save();
     }
 
     void setArtifactHelmet(const ArtifactClass& NewArtifactHelmet){
@@ -204,6 +217,7 @@ public:
 
             this->ArtifactHelmet= NewArtifactHelmet;
         }
+        this->save();
     }
 
     void setArtifactArmor(const ArtifactClass& NewArtifactArmor){
@@ -214,6 +228,7 @@ public:
             removeByArtifact(NewArtifactArmor);
             this->ArtifactArmor= NewArtifactArmor;
         }
+        this->save();
     }
 
     void setArtifactHands(const ArtifactClass& NewArtifactHands){
@@ -223,6 +238,7 @@ public:
             }
             this->ArtifactHands= NewArtifactHands;
         }
+        this->save();
     }
 
     void setArtifactLegs(const ArtifactClass& NewArtifactLegs){
@@ -232,6 +248,7 @@ public:
             }
             this->ArtifactLegs= NewArtifactLegs;
         }
+        this->save();
     }
 
     void setSkill(const SkillClass& newSkill){
@@ -252,6 +269,7 @@ public:
             }
             number+=1;
         }
+        this->save();
     }
 
     explicit HeroClass()
@@ -268,6 +286,97 @@ public:
         this->knowledge = 0;
         this->gold = 100;
     }
+
+    void save()
+    {
+        json infoJSON = json{
+                {"HP", HP},
+                {"level", level},
+                {"maxHP", maxHP},
+                {"experience", experience},
+                {"damage", damage},
+                {"defense", defense},
+                {"knowledge", knowledge},
+                {"magic_power", magic_power},
+                {"mana", mana},
+                {"maxMana", maxMana},
+                {"gold", gold},
+                {"vulnerabilityElement", vulnerabilityElement},
+        };
+
+
+
+        json sethJSON = json{
+               {"ArtifactHelmet", ArtifactHelmet.getSave()},
+               {"ArtifactArmor", ArtifactArmor.getSave()},
+               {"ArtifactHands", ArtifactHands.getSave()},
+               {"ArtifactLegs", ArtifactLegs.getSave()},
+        };
+
+        std::vector<json> inventoryToJSON;
+        for(ArtifactClass& arti : this->inventory)
+        {
+            inventoryToJSON.push_back(arti.getSave());
+        }
+
+        std::vector<json> armiesToJSON;
+        for(ArmyClass& army : this->armies)
+        {
+            armiesToJSON.push_back(army.getSave());
+        }
+
+        json first_skill;
+        if (!skills.empty()){
+            first_skill = skills[0].getSave();
+        }
+
+        json main = json{
+                {"HeroName", HeroName},
+                {"GradeName", GradeName},
+                {"info", infoJSON},
+                {"seth", sethJSON},
+                {"inventory", inventoryToJSON},
+                {"armies", armiesToJSON},
+                {"first_skill", first_skill}
+        };
+        ManagementSave::saveJSON(HeroName, main);
+    }
+
+    void load(json data){
+        HP = data["info"]["HP"].get<int>();
+        level = data["info"]["level"].get<int>();
+        maxHP = data["info"]["maxHP"].get<int>();
+        experience = data["info"]["experience"].get<int>();
+        damage = data["info"]["damage"].get<int>();
+        defense = data["info"]["defense"].get<int>();
+        knowledge = data["info"]["knowledge"].get<int>();
+        magic_power = data["info"]["magic_power"].get<int>();
+        mana = data["info"]["mana"].get<int>();
+        maxMana = data["info"]["maxMana"].get<int>();
+        gold = data["info"]["gold"].get<int>();
+        vulnerabilityElement= data["info"]["vulnerabilityElement"].get<int>();
+
+        inventory.clear();
+        for(auto& arti : data["inventory"].get<std::vector<json>>())
+        {
+            this->newArtifactInventory(ArtifactClass::Load(arti));
+        }
+
+        armies.clear();
+        for(auto& army : data["armies"].get<std::vector<json>>())
+        {
+            this->newArmy(ArmyClass::Load(army));
+        }
+
+        ArtifactHelmet = ArtifactClass::Load(data["seth"]["ArtifactHelmet"]);
+        ArtifactArmor = ArtifactClass::Load(data["seth"]["ArtifactArmor"]);
+        ArtifactHands = ArtifactClass::Load(data["seth"]["ArtifactHands"]);
+        ArtifactLegs = ArtifactClass::Load(data["seth"]["ArtifactLegs"]);
+
+        this->setSkill(SkillClass::Load(data["first_skill"]));
+        if(level>1){this->up_new_skill();};
+    }
+
 
 protected:
 
@@ -310,11 +419,11 @@ protected:
             this->up_new_skill();
             this->check_level();
         }
+        this->save();
     }
 
     void up_new_skill()
     {
-        int number = 1;
         for(const auto& atr : this->allSkillsGrade)
         {
             if( atr.getLevel()==level)

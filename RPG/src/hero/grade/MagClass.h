@@ -18,10 +18,10 @@ public:
         this->maxMana = 100;
         this->mana = 100;
         this->magic_power = 30;
-        this->setArtifactHelmet(MagArtifact::helmet);
-        this->setArtifactArmor(MagArtifact::armor);
-        this->setArtifactHands(MagArtifact::hands);
-        this->setArtifactLegs(MagArtifact::legs);
+        this->ArtifactHelmet = MagArtifact::helmet;
+        this->ArtifactArmor = MagArtifact::armor;
+        this->ArtifactHands = MagArtifact::hands;
+        this->ArtifactLegs = MagArtifact::legs;
         this->allSkillsGrade={
                 MagSkills::flashlightLight,
                 MagSkills::staffStrike,

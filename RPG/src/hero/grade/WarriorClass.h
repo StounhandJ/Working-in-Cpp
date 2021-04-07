@@ -16,10 +16,10 @@ public:
         this->maxMana = 100;
         this->damage = 10;
         this->defense = 25;
-        this->setArtifactHelmet(WarriorArtifact::helmet);
-        this->setArtifactArmor(WarriorArtifact::armor);
-        this->setArtifactHands(WarriorArtifact::hands);
-        this->setArtifactLegs(WarriorArtifact::legs);
+        this->ArtifactHelmet = WarriorArtifact::helmet;
+        this->ArtifactArmor = WarriorArtifact::armor;
+        this->ArtifactHands = WarriorArtifact::hands;
+        this->ArtifactLegs = WarriorArtifact::legs;
         this->allSkillsGrade={
                 WarriorSkills::lightStrike,
                 WarriorSkills::strongBlow,

@@ -1,7 +1,11 @@
 #include <utility>
+#include "nlohmann/json.hpp"
 
 #ifndef RPG_ARMYCLASS_H
 #define RPG_ARMYCLASS_H
+using json = nlohmann::json;
+// ArmyClass(Название, Количество, HP, Урон, Защита, ЭлементАтаки, ЭлементУезвимости, Исцеление);
+
 class ArmyClass {
 public:
     std::string getName() const{return this->name;}
@@ -55,6 +59,29 @@ public:
 
     void addCount(int NewCount){
         this->count+=NewCount;
+    }
+
+    json getSave()
+    {
+        return json{
+                {"name", name},
+                {"HP", HP},
+                {"damage", damage},
+                {"defense", defense},
+                {"element", element},
+                {"vulnerabilityElement", vulnerabilityElement},
+                {"selfHealing", selfHealing},
+                {"count", count},
+                {"deadWarriors", deadWarriors}
+        };
+    }
+
+    static ArmyClass Load(json data)
+    {
+        return ArmyClass(data["name"].get<std::string>(),data["count"].get<int>(),
+                         data["HP"].get<int>(), data["damage"].get<int>(),
+                         data["defense"].get<int>(), data["element"].get<int>(),
+                         data["vulnerabilityElement"].get<int>(), data["selfHealing"].get<int>());
     }
 
 private:

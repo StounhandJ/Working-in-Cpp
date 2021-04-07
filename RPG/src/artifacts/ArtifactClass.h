@@ -1,6 +1,9 @@
 #include <string>
+#include "nlohmann/json.hpp"
+
 #ifndef RPG_ARTIFACTCLASS_CPP
 #define RPG_ARTIFACTCLASS_CPP
+using json = nlohmann::json;
 // ArtifactClass(Название, Тип, HP, Мана, ФизУрон, МагУрон, Защита, Знания, Цена);
 
 namespace Artifact {
@@ -58,6 +61,33 @@ public:
     {
 
     }
+
+    json getSave()
+    {
+        return json{
+                {"ArtifactName", ArtifactName},
+                {"type", type},
+                {"gold", gold},
+                {"optionally_damage", optionally_damage},
+                {"optionally_HP", optionally_HP},
+                {"optionally_defense", optionally_defense},
+                {"optionally_knowledge", optionally_knowledge},
+                {"optionally_magic_power", optionally_magic_power},
+                {"optionally_mana", optionally_mana},
+
+        };
+    }
+
+    static ArtifactClass Load(json data)
+    {
+        return  ArtifactClass(
+                    data["ArtifactName"].get<std::string>(), data["type"].get<int>(),
+                    data["optionally_HP"].get<int>(), data["optionally_mana"].get<int>(),
+                    data["optionally_damage"].get<int>(),data["optionally_magic_power"].get<int>(),
+                    data["optionally_defense"].get<int>(), data["optionally_knowledge"].get<int>(),
+                    data["gold"].get<int>());
+    }
+
 
 
 private:

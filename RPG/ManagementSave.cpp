@@ -7,6 +7,7 @@ using namespace std;
 namespace ManagementSave {
 
     string saveDirectory = "saves";
+    string pathRecord = "record.json";
 
     void createDir()
     {
@@ -53,6 +54,26 @@ namespace ManagementSave {
         createDir();
         std::ofstream file(saveDirectory+"/"+name+".json");
         file << data;
+        file.close();
+    }
+
+    json gerRecords()
+    {
+        json data;
+        ifstream ifs(pathRecord);
+        if (ifs.is_open()) {
+            ifs >> data;
+            ifs.close();
+        }
+        return data;
+    }
+
+    void setRecord(string name, json data)
+    {
+        json records = gerRecords();
+        records[name] = data;
+        std::ofstream file(pathRecord);
+        file << records;
         file.close();
     }
 

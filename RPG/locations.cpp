@@ -307,6 +307,48 @@ namespace locations
         }
     }
 
+    void records(){
+        bool IsSort = false;
+        while (true) {
+            clear();
+            vector<vector<string>> sortRecord;
+            json data = ManagementSave::gerRecords();
+            for (auto val : data.items())
+            {
+                 if(val.value().contains("level") && val.value().contains("gold")) {
+                     vector<string> vrem;
+                     vrem.push_back(val.key());
+                     vrem.push_back(to_string(val.value()["level"].get<int>()));
+                     vrem.push_back(to_string(val.value()["gold"].get<int>()));
+                     sortRecord.push_back(vrem);
+                 }
+            }
+            if(IsSort){
+                sort(sortRecord.begin(), sortRecord.end(), sortGold);
+            }
+            else
+            {
+                sort(sortRecord.begin(), sortRecord.end(), sortLevel);
+            }
+            json records =  ManagementSave::gerRecords();
+            json sortRecords;
+            printf("-----------------------------\n");
+            printf("|%15s|%5s|%7s|\n", "Ник", "Уровень", "Золото");
+            printf("-----------------------------\n");
+            for (auto val : sortRecord)
+            {
+                printf("|%12s|%7s|%6s|\n", val[0].c_str(), val[1].c_str(), val[2].c_str());
+            };
+            printf("-----------------------------\n");
+            switch (choice("", list<string>{"Сортировать по уровню", "Сортировка по золоту"})) {
+                case 1:IsSort=false;break;
+                case 2:IsSort=true;break;
+                case 0:
+                    return;
+            }
+        }
+    }
+
     int menu()
     {
         while (true){
@@ -325,12 +367,13 @@ namespace locations
             statistics+="Знания: "+to_string(Hero.getKnowledgeAll())+" +"+to_string(Hero.getKnowledgeArtifact())+" доп.маг.урон "+to_string((int)(Hero.getKnowledgePercentage()*100))+"%"+"\n";
             statistics+="Золото: "+to_string(Hero.getGold())+"\n";
             std::cout << statistics << std::endl;
-            switch (choice("", list<string>{"Инвентарь" ,"Список скилов","Армии","Выход из игры"})){
+            switch (choice("", list<string>{"Инвентарь" ,"Список скилов","Армии","Таблица рекордов","Выход из игры"})){
                 case 0:return 0;break;
                 case 1:inventory();break;
                 case 2:listSkills();break;
                 case 3:listArmies();break;
-                case 4:return 1;break;
+                case 4:records();break;
+                case 5:return 1;break;
             }
         }
     }

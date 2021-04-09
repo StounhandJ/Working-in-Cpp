@@ -138,7 +138,6 @@ public:
         dealtDamage = elementAttacks==this->vulnerabilityElement?int(dealtDamage*1.5):dealtDamage;
         this->HP-=dealtDamage;
         this->check_death();
-        this->save();
     }
 
     void check_IsDeathArmies(){
@@ -340,6 +339,13 @@ public:
                 {"first_skill", first_skill}
         };
         ManagementSave::saveJSON(HeroName, main);
+
+        // --- Сохранения рекорда --- //
+        json record = json{
+                {"level", level},
+                {"gold", gold}
+        };
+        ManagementSave::setRecord(HeroName, record);
     }
 
     void load(json data){

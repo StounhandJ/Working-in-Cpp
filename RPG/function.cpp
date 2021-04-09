@@ -123,3 +123,12 @@ int randInt(int from, int before){
     return number;
 }
 
+bool sortLevel(vector<string> i1, vector<string> i2)
+{
+    return stoi(i1[1])>stoi(i2[1]);
+}
+
+bool sortGold(vector<string> i1, vector<string> i2)
+{
+    return stoi(i1[2])>stoi(i2[2]);
+}

@@ -5,5 +5,7 @@ namespace ManagementSave{
     std::string getGrade(std::string name);
     json getSave(std::string name);
     void saveJSON(std::string name, json data);
+    json gerRecords();
+    void setRecord(std::string name, json data);
 }
 #endif //RPG_MANAGEMENTSAVE_H

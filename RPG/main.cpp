@@ -12,7 +12,7 @@ HeroClass Hero = HeroClass();
 #include <iostream>
 #include <windows.h>
 #include <string>
-#include "function.cpp"
+#include "Headers/function.h"
 #include "locations.cpp"
 #include "src/artifacts/ArtifactClass.h"
 #include "src/skills/SkillClass.h"

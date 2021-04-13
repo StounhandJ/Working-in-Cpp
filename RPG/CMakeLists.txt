@@ -36,7 +36,8 @@ add_executable(RPG
         src/army/armies/Elves.h
         # Боссы #
         src/bosses/PharaohClass.h src/bosses/LichClass.h
-        ManagementSave.cpp Headers/ManagementSave.h)
+        # Доп файлы #
+        ManagementSave.cpp Headers/ManagementSave.h Headers/function.h function.cpp)
 
 target_link_libraries(RPG PRIVATE nlohmann_json::nlohmann_json)
 

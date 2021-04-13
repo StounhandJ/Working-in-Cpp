@@ -216,7 +216,6 @@ public:
 
             this->ArtifactHelmet= NewArtifactHelmet;
         }
-        this->save();
     }
 
     void setArtifactArmor(const ArtifactClass& NewArtifactArmor){
@@ -227,7 +226,6 @@ public:
             removeByArtifact(NewArtifactArmor);
             this->ArtifactArmor= NewArtifactArmor;
         }
-        this->save();
     }
 
     void setArtifactHands(const ArtifactClass& NewArtifactHands){
@@ -237,7 +235,6 @@ public:
             }
             this->ArtifactHands= NewArtifactHands;
         }
-        this->save();
     }
 
     void setArtifactLegs(const ArtifactClass& NewArtifactLegs){
@@ -247,7 +244,6 @@ public:
             }
             this->ArtifactLegs= NewArtifactLegs;
         }
-        this->save();
     }
 
     void setSkill(const SkillClass& newSkill){
@@ -268,7 +264,6 @@ public:
             }
             number+=1;
         }
-        this->save();
     }
 
     explicit HeroClass()

@@ -337,7 +337,9 @@ namespace locations
             printf("-----------------------------\n");
             for (auto val : sortRecord)
             {
-                printf("|%12s|%7s|%6s|\n", val[0].c_str(), val[1].c_str(), val[2].c_str());
+                string nick = val[0];
+                if(nick.length()>12) nick = nick.substr(0,10)+"..";
+                printf("|%12s|%7s|%6s|\n", nick.c_str(), val[1].c_str(), val[2].c_str());
             };
             printf("-----------------------------\n");
             switch (choice("", list<string>{"Сортировать по уровню", "Сортировка по золоту"})) {
